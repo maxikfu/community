@@ -22,7 +22,7 @@ def processing():
         api = vk.API(session, v=5.95)
         user_id = data['object']['from_id']
         message_template = 'Привет. Разработка чат-бота в процессе.'
-        api.messages.send(peer_id=user_id, message=message_template, random_id=random.randint(0, sys.maxsize))
+        api.messages.send(peer_id=user_id, message=message_template, random_id=data['object']['random_id'])
         return 'ok'
     # new wall post handler
     elif data['type'] == 'wall_post_new':
@@ -30,6 +30,8 @@ def processing():
         api = vk.API(session, v=5.95)
         api.wall.post(owner_id=auth.comm_id, from_group=1, signed=anonymity_check(data['object']['text']), post_id=data['object']['id'])
         return 'ok'
+    elif data['type'] == '':
+        pass
 
 
 # all posts anonymous, only if specify they will be not anonymous
