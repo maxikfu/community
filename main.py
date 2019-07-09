@@ -1,10 +1,22 @@
 from flask import Flask, request
 import json
+import vk
+import auth
 
+auth = auth.Token()
 app = Flask(__name__)
 @app.route('/', methods=['POST', 'GET'])
 def processing():
-    return '85b0d4a5'
+    data = json.loads(request.data)
+    if 'type' not in data.keys():
+        return 'not vk'
+    elif data['type'] == 'message_new':
+        session = vk.Session()
+        api = vk.API(session, v=5.78)
+        user_id = data['object']['user_id']
+        message_template = 'Привет. Разработка чат-бота в процессе.'
+        api.messages.send(access_token=auth.community, user_id=str(user_id), message=message_template)
+        return 'ok'
 
 
 if __name__ == '__main__':
