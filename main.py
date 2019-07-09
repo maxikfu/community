@@ -12,7 +12,7 @@ def processing():
         return 'not vk'
     elif data['type'] == 'message_new':
         session = vk.Session(access_token=auth.community)
-        api = vk.API(session, v=5.100)
+        api = vk.API(session, v=5.95)
         user_id = data['object']['from_id']
         message_template = 'Привет. Разработка чат-бота в процессе.'
         api.messages.send(peer_id=user_id, message=message_template)
