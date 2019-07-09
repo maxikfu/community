@@ -45,7 +45,7 @@ def processing():
         api = vk.API(session, v=5.95)
         user_id = data['object']['user_id']
         message_template = 'We are sorry to see you go. Have a good life =)'
-        if data['object']['self'] == 0:
+        if data['object']['self'] == 1:
             api.messages.send(peer_id=user_id, message=message_template, random_id=0)
         return 'ok'
 
