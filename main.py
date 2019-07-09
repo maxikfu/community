@@ -3,6 +3,7 @@ import json
 import vk
 import auth
 import random
+import sys
 
 
 auth = auth.Token()
@@ -17,7 +18,7 @@ def processing():
         api = vk.API(session, v=5.95)
         user_id = data['object']['from_id']
         message_template = 'Привет. Разработка чат-бота в процессе.'
-        api.messages.send(peer_id=user_id, message=message_template, random_id=random.randint)
+        api.messages.send(peer_id=user_id, message=message_template, random_id=random.randint(0, sys.maxsize))
         return 'ok'
 
 
