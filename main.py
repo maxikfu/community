@@ -21,7 +21,7 @@ def processing():
         session = vk.Session(access_token=auth.community)
         api = vk.API(session, v=5.95)
         user_id = data['object']['from_id']
-        message_template = 'Привет. Разработка чат-бота в процессе.'
+        message_template = 'Привет. Разработка чат-бота в процессе. Thank you!'
         api.messages.send(peer_id=user_id, message=message_template, random_id=data['object']['random_id'])
         return 'ok'
     # new wall post handler
@@ -30,8 +30,24 @@ def processing():
         api = vk.API(session, v=5.95)
         api.wall.post(owner_id=auth.comm_id, from_group=1, signed=anonymity_check(data['object']['text']), post_id=data['object']['id'])
         return 'ok'
-    elif data['type'] == '':
-        pass
+    # user joined the group
+    elif data['type'] == 'group_join':
+        session = vk.Session(access_token=auth.community)
+        api = vk.API(session, v=5.95)
+        user_id = data['object']['user_id']
+        message_template = 'Thank you, for joining our community.\n' \
+                           'Чтобы опубликовать новость на стене анонимно, необходимо в сообщение указать слово ' \
+                           'Анон либо Анонимно, в противном случае анонимность поста не гарантирована.'
+        api.messages.send(peer_id=user_id, message=message_template, random_id=0)
+        return 'ok'
+    elif data['type'] == 'group_leave':
+        session = vk.Session(access_token=auth.community)
+        api = vk.API(session, v=5.95)
+        user_id = data['object']['user_id']
+        message_template = 'We are sorry to see you go. Have a good life =)'
+        if data['object']['self'] == 0:
+            api.messages.send(peer_id=user_id, message=message_template, random_id=0)
+        return 'ok'
 
 
 # all posts anonymous, only if specify they will be not anonymous
