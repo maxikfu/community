@@ -1,8 +1,10 @@
 from flask import Flask, request
+import json
 
 app = Flask(__name__)
-@app.route('/')
-def hello():
+@app.route('/', methods=['POST', 'GET'])
+def processing():
+    data = json.loads(request.data)
     return 'Hi'
 
 
