@@ -3,10 +3,22 @@ import json
 import vk
 import auth
 import re
+import scrap
+from datetime import datetime
 
 
 auth = auth.Token()
 app = Flask(__name__)
+
+
+# all posts anonymous, only if specify they will be not anonymous
+def anonymity_check(wall_post_text):   # need more sophisticated algorithm
+    if re.search(r"(не *анон)|(не *от *анон)", wall_post_text, re.IGNORECASE):  # not anon
+        return 1
+    elif re.search(r"\b(анон)\b|\b(анонимно)\b|(аноним)|\b(anon)", wall_post_text, re.IGNORECASE):  # anon post
+        return 0
+    else:
+        return 1
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -49,14 +61,16 @@ def processing():
         return 'ok'
 
 
-# all posts anonymous, only if specify they will be not anonymous
-def anonymity_check(wall_post_text):   # need more sophisticated algorithm
-    if re.search(r"(не *анон)|(не *от *анон)", wall_post_text, re.IGNORECASE):  # not anon
-        return 1
-    elif re.search(r"\b(анон)\b|\b(анонимно)\b|(аноним)|\b(anon)", wall_post_text, re.IGNORECASE):  # anon post
-        return 0
-    else:
-        return 1
+@app.route('/news', methods=['POST', 'GET'])
+def processing_news():
+    session = vk.Session(access_token=auth.user)
+    api = vk.API(session, v=5.95)
+    # retrieving last post date
+    with open('last_news_date.txt', 'r') as f:
+        last = datetime.strptime(f.readline(), '%Y-%m-%d %H:%M:%S')
+    for article in scrap.get_news():
+        if article['datetime'] > last:
+            scrap.post(auth, article, api)
 
 
 if __name__ == '__main__':
