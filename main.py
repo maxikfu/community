@@ -5,7 +5,7 @@ app = Flask(__name__)
 @app.route('/', methods=['POST', 'GET'])
 def processing():
     data = json.loads(request.data)
-    return 'Hi'
+    return data
 
 
 if __name__ == '__main__':
