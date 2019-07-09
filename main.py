@@ -26,10 +26,11 @@ def processing():
         return 'ok'
     # new wall post handler
     elif data['type'] == 'wall_post_new':
-        session = vk.Session(access_token=auth.user)
-        api = vk.API(session, v=5.95)
-        api.wall.post(owner_id=auth.comm_id, from_group=1, signed=anonymity_check(data['object']['text']), post_id=data['object']['id'])
-        return 'ok'
+        if data['object']['from_id'] != auth.comm_id:
+            session = vk.Session(access_token=auth.user)
+            api = vk.API(session, v=5.95)
+            api.wall.post(owner_id=auth.comm_id, from_group=1, signed=anonymity_check(data['object']['text']), post_id=data['object']['id'])
+            return 'ok'
     # user joined the group
     elif data['type'] == 'group_join':
         session = vk.Session(access_token=auth.community)
