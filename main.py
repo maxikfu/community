@@ -2,8 +2,6 @@ from flask import Flask, request
 import json
 import vk
 import auth
-import random
-import sys
 import re
 
 
