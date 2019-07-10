@@ -5,10 +5,10 @@ import vk
 import auth
 
 announcements_url = 'http://urmary.cap.ru/news?type=announcements'
+site_url = 'http://urmary.cap.ru/news/?type=news'
 
 
-def get_news():
-    site_url = 'http://urmary.cap.ru/news/?type=news'
+def get_news(site_url):
     # getting page content
     page = requests.get(site_url)
     # parsing html
@@ -28,7 +28,7 @@ def get_news():
         soup = BeautifulSoup(full_article.content, 'html.parser')
         tag_image = soup.find('img', attrs={'class': 'map_img'})
         if tag_image:
-            image_url = 'http://urmary.cap.ru/' + tag_image['src']
+            image_url = tag_image['src']
         else:
             image_url = False
         news_container = soup.find('div', attrs={'class': 'news_text'})
@@ -58,18 +58,28 @@ def post(auth, content, api):
         att_photo = None
     mess_template = content['title'] + '\n \n' + content['text'] + '\n Первоисточник: http://urmary.cap.ru'
     # posting to wall
-    api.wall.post(owner_id=auth.comm_id, from_group=1, signed=0,
-                  message=mess_template, attachments=att_photo)
+    try:
+        result = api.wall.post(owner_id=1, from_group=1, signed=0, message=mess_template, attachments=att_photo)
+    except:
+        result = 'error'
+    return result
 
 
 if __name__ == '__main__':
     auth = auth.Token()
-    session = vk.Session(access_token=auth.community)
+    session = vk.Session(access_token=auth.user)
     api = vk.API(session, v=5.95)
     # retrieving last post date
     with open('last_news_date.txt', 'r') as f:
         last = datetime.strptime(f.readline(), '%Y-%m-%d %H:%M:%S')
-    for article in get_news():
+    for article in get_news(site_url):
         if article['datetime'] > last:
-            print(article)
-            break
+            response = post(auth, article, api)
+            if response != 'error':
+                # here we update last posted news date in the file
+                print(last)
+                last = article['datetime']
+    with open('last_news_date.txt', 'w') as f:
+        f.write(str(last))
+
+
