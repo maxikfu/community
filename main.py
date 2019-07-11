@@ -78,6 +78,7 @@ def processing_news():
                     last = article['datetime']
         # with open('last_news_date.txt', 'w') as f:
         #     f.write(str(last))
+    return 'ok'
 
 
 if __name__ == '__main__':
