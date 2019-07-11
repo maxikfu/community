@@ -75,10 +75,11 @@ if __name__ == '__main__':
     for article in get_news():
         if article['datetime'] > last:
             response = post(auth, article, api)
-            if response != 'error':
-                # here we update last posted news date in the file
-                last = article['datetime']
-    with open('last_news_date.txt', 'w') as f:
-        f.write(str(last))
+            # if response != 'error':
+            #     # here we update last posted news date in the file
+            #     last = article['datetime']
+
+    # with open('last_news_date.txt', 'w') as f:
+    #     f.write(str(last))
 
 

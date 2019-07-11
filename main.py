@@ -76,9 +76,10 @@ def processing_news():
             if response != 'error':
                 # here we update last posted news date in the file
                 last = article['datetime']
+        break
     # with open('last_news_date.txt', 'w') as f:
     #     f.write(str(last))
-    return 'ok'
+    return response
 
 
 if __name__ == '__main__':
