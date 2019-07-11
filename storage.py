@@ -33,3 +33,5 @@ if __name__ == '__main__':
     print(store)
     print(n)
     print(store > n)
+    update_doc(n)
+    print(get_doc())
