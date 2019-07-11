@@ -59,7 +59,7 @@ def post(auth, content, api):
     mess_template = content['title'] + '\n \n' + content['text'] + '\n Первоисточник: http://urmary.cap.ru'
     # posting to wall
     try:
-        result = api.wall.post(owner_id=1, from_group=1, signed=0, message=mess_template, attachments=att_photo)
+        result = api.wall.post(owner_id=auth.comm_id, from_group=1, signed=0, message=mess_template, attachments=att_photo)
     except:
         result = 'error'
     return result
@@ -68,7 +68,7 @@ def post(auth, content, api):
 if __name__ == '__main__':
     auth = auth.Token()
     session = vk.Session(access_token=auth.user)
-    api = vk.API(session, v=5.95)
+    api = vk.API(session, v=5.101)
     # retrieving last post date
     with open('last_news_date.txt', 'r') as f:
         last = datetime.strptime(f.readline(), '%Y-%m-%d %H:%M:%S')
@@ -78,7 +78,7 @@ if __name__ == '__main__':
             # if response != 'error':
             #     # here we update last posted news date in the file
             #     last = article['datetime']
-
+        break
     # with open('last_news_date.txt', 'w') as f:
     #     f.write(str(last))
 
