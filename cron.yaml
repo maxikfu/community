@@ -1,4 +1,1 @@
 cron:
-- description: "news retrieval and posting"
-  url: /news
-  schedule: every 5 hours

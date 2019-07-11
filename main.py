@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 from flask import Flask, request
 import json
 import vk
@@ -6,6 +5,7 @@ import auth
 import re
 import scrap
 from datetime import datetime
+
 
 
 auth = auth.Token()
