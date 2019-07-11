@@ -68,20 +68,6 @@ def post(auth, content, api):
 
 
 if __name__ == '__main__':
-    auth = auth.Token()
-    session = vk.Session(access_token=auth.user)
-    api = vk.API(session, v=5.101)
-    # retrieving last post date
-    with open('last_news_date.txt', 'r') as f:
-        last = datetime.strptime(f.readline(), '%Y-%m-%d %H:%M:%S')
-    for article in get_news():
-        if article['datetime'] > last:
-            response = post(auth, article, api)
-            # if response != 'error':
-            #     # here we update last posted news date in the file
-            #     last = article['datetime']
-        break
-    # with open('last_news_date.txt', 'w') as f:
-    #     f.write(str(last))
+    pass
 
 
