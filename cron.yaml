@@ -1,1 +1,4 @@
 cron:
+- description: "news check"
+  url: /news
+  schedule: every 4 hours
