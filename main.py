@@ -31,7 +31,8 @@ def processing():
         session = vk.Session(access_token=auth.community)
         api = vk.API(session, v=5.95)
         user_id = data['object']['from_id']
-        message_template = 'Привет. Разработка чат-бота в процессе. Thank you!'
+        message_template = 'Привет. Разработка чат-бота в процессе. Ваше сообщение перенаправлено администратору, ' \
+                           'он свяжется с вами в скором времению Спасибо!'
         api.messages.send(peer_id=user_id, message=message_template, random_id=data['object']['random_id'])
         return 'ok'
     # new wall post handler
@@ -46,7 +47,7 @@ def processing():
         session = vk.Session(access_token=auth.community)
         api = vk.API(session, v=5.95)
         user_id = data['object']['user_id']
-        message_template = 'Thank you, for joining our community.\n' \
+        message_template = 'Спасибо что вы присоединились к нашему сообществу.\n' \
                            'Чтобы опубликовать новость на стене анонимно, необходимо в сообщение указать слово ' \
                            'Анон либо Анонимно, в противном случае анонимность поста не гарантирована.'
         api.messages.send(peer_id=user_id, message=message_template, random_id=0)
@@ -55,7 +56,7 @@ def processing():
         session = vk.Session(access_token=auth.community)
         api = vk.API(session, v=5.95)
         user_id = data['object']['user_id']
-        message_template = 'We are sorry to see you go. Have a good life =)'
+        message_template = 'Нам жаль что Вы покинули наше сообщество. Если Вас не затруднит отправьте нам отзыв =)'
         if data['object']['self'] == 1:
             api.messages.send(peer_id=user_id, message=message_template, random_id=0)
         return 'ok'
@@ -75,8 +76,8 @@ def processing_news():
                 if response != 'error':
                     # here we update last posted news date in the file
                     last = article['datetime']
-        with open('last_news_date.txt', 'w') as f:
-            f.write(str(last))
+        # with open('last_news_date.txt', 'w') as f:
+        #     f.write(str(last))
 
 
 if __name__ == '__main__':

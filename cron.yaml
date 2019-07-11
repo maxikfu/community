@@ -1,1 +1,4 @@
 cron:
+- description: "every 5 hours news from off website"
+  url: /news
+  schedule: every 5 hours
