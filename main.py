@@ -63,19 +63,20 @@ def processing():
 
 @app.route('/news', methods=['POST', 'GET'])
 def processing_news():
-    session = vk.Session(access_token=auth.user)
-    api = vk.API(session, v=5.95)
-    # retrieving last post date
-    with open('last_news_date.txt', 'r') as f:
-        last = datetime.strptime(f.readline(), '%Y-%m-%d %H:%M:%S')
-    for article in scrap.get_news():
-        if article['datetime'] > last:
-            response = scrap.post(auth, article, api)
-            if response != 'error':
-                # here we update last posted news date in the file
-                last = article['datetime']
-    with open('last_news_date.txt', 'w') as f:
-        f.write(str(last))
+    if request.headers['X-Appengine-Cron']:
+        session = vk.Session(access_token=auth.user)
+        api = vk.API(session, v=5.95)
+        # retrieving last post date
+        with open('last_news_date.txt', 'r') as f:
+            last = datetime.strptime(f.readline(), '%Y-%m-%d %H:%M:%S')
+        for article in scrap.get_news():
+            if article['datetime'] > last:
+                response = scrap.post(auth, article, api)
+                if response != 'error':
+                    # here we update last posted news date in the file
+                    last = article['datetime']
+        with open('last_news_date.txt', 'w') as f:
+            f.write(str(last))
 
 
 if __name__ == '__main__':
