@@ -2,3 +2,4 @@ Flask == 1.1.1
 vk == 2.0.2
 requests == 2.21.0
 bs4
+firebase-admin

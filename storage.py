@@ -1,20 +1,32 @@
-import datetime
 from google.cloud import firestore
 import google.cloud.exceptions
+from datetime import datetime
 
-
-def get_data():
+def get_doc():
     db = firestore.Client()
     # [START get_check_exists]
     doc_ref = db.collection(u'db').document(u'news')
-
     try:
         doc = doc_ref.get()
-        print(u'Document data: {}'.format(doc.to_dict()))
+        return doc.to_dict()['threshold']
     except google.cloud.exceptions.NotFound:
         print(u'No such document!')
     # [END get_check_exists]
 
 
+def update_doc(new_value):
+    db = firestore.Client()
+    # [START update_doc]
+    doc_ref = db.collection(u'db').document(u'news')
+
+    # Set the capital field
+    doc_ref.update({u'threshold': new_value})
+    # [END update_doc]
+
+
 if __name__ == '__main__':
-    get_data()
+    store = get_doc()
+    n = datetime.now()
+    print(store)
+    print(n)
+    print(store > n)
