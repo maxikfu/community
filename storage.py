@@ -1,6 +1,9 @@
 from google.cloud import firestore
 import google.cloud.exceptions
 from datetime import datetime
+import pytz
+utc = pytz.UTC
+
 
 def get_doc():
     db = firestore.Client()
@@ -26,7 +29,7 @@ def update_doc(new_value):
 
 if __name__ == '__main__':
     store = get_doc()
-    n = datetime.now()
+    n = utc.localize(datetime.now())
     print(store)
     print(n)
     print(store > n)
