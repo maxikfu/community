@@ -5,10 +5,10 @@ import vk
 import auth
 
 announcements_url = 'http://urmary.cap.ru/news?type=announcements'
-site_url = 'http://urmary.cap.ru/news/?type=news'
+site_url_ = 'http://urmary.cap.ru/news/?type=news'
 
 
-def get_news(site_url):
+def get_news(site_url='http://urmary.cap.ru/news/?type=news'):
     # getting page content
     page = requests.get(site_url)
     # parsing html
@@ -72,12 +72,11 @@ if __name__ == '__main__':
     # retrieving last post date
     with open('last_news_date.txt', 'r') as f:
         last = datetime.strptime(f.readline(), '%Y-%m-%d %H:%M:%S')
-    for article in get_news(site_url):
+    for article in get_news():
         if article['datetime'] > last:
             response = post(auth, article, api)
             if response != 'error':
                 # here we update last posted news date in the file
-                print(last)
                 last = article['datetime']
     with open('last_news_date.txt', 'w') as f:
         f.write(str(last))
