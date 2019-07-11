@@ -4,8 +4,7 @@ import vk
 import auth
 import re
 import scrap
-from datetime import datetime
-
+import storage
 
 
 auth = auth.Token()
@@ -69,17 +68,14 @@ def processing_news():
         session = vk.Session(access_token=auth.user)
         api = vk.API(session, v=5.95)
         # retrieving last post date
-        with open('last_news_date.txt', 'r') as f:
-            last = datetime.strptime(f.readline(), '%Y-%m-%d %H:%M:%S')
+        last = storage.get_doc()
         for article in scrap.get_news():
             if article['datetime'] > last:
                 response = scrap.post(auth, article, api)
                 if response != 'error':
                     # here we update last posted news date in the file
                     last = article['datetime']
-            break
-    # with open('last_news_date.txt', 'w') as f:
-    #     f.write(str(last))
+        storage.update_doc(last)
     return 'ok'
 
 

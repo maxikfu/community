@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import vk
 import auth
+import pytz
+utc = pytz.UTC
 
 announcements_url = 'http://urmary.cap.ru/news?type=announcements'
 site_url_ = 'http://urmary.cap.ru/news/?type=news'
@@ -37,7 +39,7 @@ def get_news(site_url='http://urmary.cap.ru/news/?type=news'):
         for tags in p_tags:
             article_text += tags.text + '\n'
         # now we need to pass it to vk api
-        d = {'image_url': image_url, 'title': title, 'text': article_text, 'datetime': news_datetime}
+        d = {'image_url': image_url, 'title': title, 'text': article_text, 'datetime': utc.localize(news_datetime)}
         yield d
 
 
