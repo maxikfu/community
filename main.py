@@ -5,7 +5,7 @@ import auth
 import re
 import scrap
 import storage
-
+import time
 
 auth = auth.Token()
 app = Flask(__name__)
@@ -34,6 +34,7 @@ def processing():
         message_template = 'Привет. Разработка чат-бота в процессе. Ваше сообщение перенаправлено администратору, ' \
                            'он свяжется с вами в скором времению Спасибо!'
         api.messages.send(peer_id=user_id, message=message_template, random_id=data['object']['random_id'])
+        time.sleep(30)
         return 'ok'
     # new wall post handler
     elif data['type'] == 'wall_post_new':
