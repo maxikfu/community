@@ -44,7 +44,7 @@ def processing():
         return 'ok'
     # user joined the group
     elif data['type'] == 'group_join':
-        session = vk.Session(access_token=auth.user)
+        session = vk.Session(access_token=auth.community)
         api = vk.API(session, v=5.95)
         user_id = data['object']['user_id']
         message_template = 'Спасибо что вы присоединились к нашему сообществу.\n' \
@@ -53,7 +53,7 @@ def processing():
         api.messages.send(peer_id=user_id, message=message_template, random_id=0)
         return 'ok'
     elif data['type'] == 'group_leave':
-        session = vk.Session(access_token=auth.user)
+        session = vk.Session(access_token=auth.community)
         api = vk.API(session, v=5.95)
         user_id = data['object']['user_id']
         message_template = 'Нам жаль что Вы покинули наше сообщество. Если Вас не затруднит отправьте нам отзыв =)'
