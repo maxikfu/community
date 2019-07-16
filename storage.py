@@ -5,33 +5,28 @@ import pytz
 utc = pytz.UTC
 
 
-def get_doc():
+def get(collection, document):
     db = firestore.Client()
     # [START get_check_exists]
-    doc_ref = db.collection(u'db').document(u'news')
+    doc_ref = db.collection(collection).document(document)
     try:
         doc = doc_ref.get()
-        return doc.to_dict()['threshold']
+        return doc.to_dict()
     except google.cloud.exceptions.NotFound:
-        print(u'No such document!')
+        return u'No such document!'
     # [END get_check_exists]
 
 
-def update_doc(new_value):
+def update(collection, document, new_value):
     db = firestore.Client()
     # [START update_doc]
-    doc_ref = db.collection(u'db').document(u'news')
-
+    doc_ref = db.collection(collection).document(document)
     # Set the capital field
-    doc_ref.update({u'threshold': new_value})
+    doc_ref.update(new_value)
     # [END update_doc]
 
 
 if __name__ == '__main__':
-    store = get_doc()
-    n = utc.localize(datetime.now())
+    store = get()
     print(store)
-    print(n)
-    print(store > n)
-    update_doc(n)
-    print(get_doc())
+

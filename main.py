@@ -68,14 +68,14 @@ def processing_news():
         session = vk.Session(access_token=auth.user)
         api = vk.API(session, v=5.95)
         # retrieving last post date
-        last = storage.get_doc()
+        last = storage.get(u'db', u'news')['threshold']
         for article in scrap.get_news():
             if article['datetime'] > last:
                 response = scrap.post(auth, article, api)
                 if response != 'error':
                     # here we update last posted news date in the file
                     last = article['datetime']
-        storage.update_doc(last)
+        storage.update(u'db', u'news', {u'threshold': last})
     return 'ok'
 
 
