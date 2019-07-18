@@ -29,10 +29,16 @@ def quick_game():
 def game(from_id, text, time, returning):
     if text.lower() == 'stop':  # deleting the saved game
         storage.delete(AKINATOR_COLLECTION, str(from_id))
-        return {"text": "Thank you for playing! If you want to play again just type and send Akinator!"}
+        return {"text": "Thank you for playing! If you want to play again just type and send Akinator!", "picture_url": None}
     if returning:  # resuming the game
         fields = storage.get(AKINATOR_COLLECTION, str(from_id))  # getting saved game
         aki = load(fields)  # creating akinator instance
+        if text.lower() in ['back', 'b']:  # we need to go back
+            try:
+                response = {"text": aki.back(), "picture_url": None}
+                return response
+            except akinator.exceptions.CantGoBackAnyFurther:
+                return {"text": "Cannot go back! If you want to stop send Stop", "picture_url": None}
         try:
             response = {"text": aki.answer(text), "picture_url": None}  # passing users answer to akinator
         except akinator.exceptions.InvalidAnswerError:
