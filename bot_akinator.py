@@ -27,7 +27,7 @@ def quick_game():
 
 
 def game(from_id, text, time, returning):
-    if text == 'Stop':  # deleting the saved game
+    if text.lower() == 'stop':  # deleting the saved game
         storage.delete(AKINATOR_COLLECTION, str(from_id))
         return {"text": "Thank you for playing! If you want to play again just type and send Akinator!"}
     if returning:  # resuming the game
