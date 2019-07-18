@@ -26,8 +26,8 @@ def quick_game():
         print("Oof\n")
 
 
-def game(from_id, text, time):
-    if str(from_id) in storage.coll_content(AKINATOR_COLLECTION):  # resuming the game
+def game(from_id, text, time, returning):
+    if returning:  # resuming the game
         fields = storage.get(AKINATOR_COLLECTION, str(from_id))  # getting saved game
         aki = load(fields)  # creating akinator instance
         response = {"text": aki.answer(text), "picture_url": None}  # passing users answer to akinator

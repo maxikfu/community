@@ -34,8 +34,9 @@ def processing():
         api = vk.API(session, v=5.95)
         user_id = data['object']['from_id']
         text = data['object']['text']
-        if re.search(r"Akinator", text, re.IGNORECASE):  # user want to play game with akinator
-            response = bot_akinator.game(user_id, text, datetime.now())
+        playing = str(user_id) in storage.coll_content(bot_akinator.AKINATOR_COLLECTION)
+        if re.search(r"Akinator", text, re.IGNORECASE) or playing:  # user want to play game with akinator
+            response = bot_akinator.game(user_id, text, datetime.now(), playing)
             message_template = response['text']
         else:
             message_template = 'Привет. Разработка чат-бота в процессе. Ваше сообщение перенаправлено администратору, ' \
