@@ -35,6 +35,8 @@ def game(from_id, text, time, returning):
         if text.lower() in ['back', 'b']:  # we need to go back
             try:
                 response = {"text": aki.back(), "image_url": None}
+                aki.last_active = time
+                storage.update(AKINATOR_COLLECTION, str(from_id), dump(aki))
                 return response
             except akinator.exceptions.CantGoBackAnyFurther:
                 return {"text": "Cannot go back! If you want to stop send Stop", "image_url": None}
