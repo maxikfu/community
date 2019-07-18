@@ -82,6 +82,5 @@ def coll_content(collection):
 
 
 if __name__ == '__main__':
-    store = get()
-    print(store)
+    print(coll_content('db'))
 

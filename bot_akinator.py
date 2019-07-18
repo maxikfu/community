@@ -30,7 +30,7 @@ def game(from_id, text, time):
     if str(from_id) in storage.coll_content(AKINATOR_COLLECTION):  # resuming the game
         fields = storage.get(AKINATOR_COLLECTION, str(from_id))  # getting saved game
         aki = load(fields)  # creating akinator instance
-        response = aki.answer(text)  # passing users answer to akinator
+        response = {"text": aki.answer(text), "picture_url": None}  # passing users answer to akinator
         #  checking if we are close to make prediction
         if aki.progression <= 85:  # we can make a prediction
             aki.win()
@@ -45,7 +45,7 @@ def game(from_id, text, time):
     else:  # creating the new game
         aki = akinator.Akinator()
         # starting game and asking user first question
-        response = aki.start_game()
+        response = {"text": aki.start_game(), "picture_url": None}
         # save current progress
         aki.last_active = time
         storage.add(AKINATOR_COLLECTION, str(from_id), dump(aki))

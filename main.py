@@ -36,7 +36,7 @@ def processing():
         text = data['object']['text']
         if re.search(r"Akinator", text, re.IGNORECASE):  # user want to play game with akinator
             response = bot_akinator.game(user_id, text, datetime.now())
-            message_template = response
+            message_template = response['text']
         else:
             message_template = 'Привет. Разработка чат-бота в процессе. Ваше сообщение перенаправлено администратору, ' \
                                'он свяжется с вами в скором времению Спасибо!'
