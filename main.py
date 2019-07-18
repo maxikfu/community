@@ -7,6 +7,7 @@ import scrap
 import storage
 from datetime import datetime
 import bot_akinator
+import requests
 
 
 auth = auth.Token()
@@ -34,14 +35,26 @@ def processing():
         api = vk.API(session, v=5.95)
         user_id = data['object']['from_id']
         text = data['object']['text']
+        att_photo = ""
         playing = str(user_id) in storage.coll_content(bot_akinator.AKINATOR_COLLECTION)
         if re.search(r"Akinator", text, re.IGNORECASE) or playing:  # user want to play game with akinator
             response = bot_akinator.game(user_id, text, datetime.now(), playing)
             message_template = response['text']
+            if response['image_url']:  # uploading image if exists
+                destination = api.photos.getMessagesUploadServer(peer_id=user_id)
+                image_get = requests.get(response['image_url'], stream=True)
+                # converting to multipart format, name of image doesn't matter
+                image_data = ("image.jpg", image_get.raw, image_get.headers['Content-Type'])
+                # sending files to server and getting photo id, owner_id etc
+                meta = requests.post(destination['upload_url'], files={'photo': image_data}).json()
+                photo = api.photos.saveMessagesPhoto(photo=meta['photo'], server=meta['server'], hash=meta['hash'])
+                # attachment need to be in special format
+                att_photo = 'photo' + str(photo[0]['owner_id']) + "_" + str(photo[0]['id'])
         else:
-            message_template = 'Привет. Разработка чат-бота в процессе. Ваше сообщение перенаправлено администратору, ' \
+            message_template = 'Привет. Разработка чат-бота в процессе. Ваше сообщение перенаправлено администратору, '\
                                'он свяжется с вами в скором времени. Спасибо!'
-        api.messages.send(peer_id=user_id, message=message_template, random_id=data['object']['random_id'])
+        api.messages.send(peer_id=user_id, message=message_template, random_id=data['object']['random_id'],
+                          attachment=att_photo)
         return 'ok'
     # new wall post handler
     elif data['type'] == 'wall_post_new':
@@ -89,3 +102,4 @@ def processing_news():
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8081, debug=True)
+
