@@ -40,7 +40,7 @@ def processing():
             message_template = response['text']
         else:
             message_template = 'Привет. Разработка чат-бота в процессе. Ваше сообщение перенаправлено администратору, ' \
-                               'он свяжется с вами в скором времению Спасибо!'
+                               'он свяжется с вами в скором времени. Спасибо!'
         api.messages.send(peer_id=user_id, message=message_template, random_id=data['object']['random_id'])
         return 'ok'
     # new wall post handler

@@ -32,7 +32,7 @@ def game(from_id, text, time, returning):
         aki = load(fields)  # creating akinator instance
         response = {"text": aki.answer(text), "picture_url": None}  # passing users answer to akinator
         #  checking if we are close to make prediction
-        if aki.progression <= 85:  # we can make a prediction
+        if aki.progression >= 85:  # we can make a prediction
             aki.win()
             response = {'text': "It's {} ({})! Was I correct?".format(aki.name, aki.description)}
             if aki.picture:
