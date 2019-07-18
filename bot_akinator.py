@@ -27,10 +27,24 @@ def quick_game():
 
 
 def game(from_id, text, time, returning):
+    if text == 'Stop':  # deleting the saved game
+        storage.delete(AKINATOR_COLLECTION, str(from_id))
+        return {"text": "Thank you for playing! If you want to play again just type and send Akinator!"}
     if returning:  # resuming the game
         fields = storage.get(AKINATOR_COLLECTION, str(from_id))  # getting saved game
         aki = load(fields)  # creating akinator instance
-        response = {"text": aki.answer(text), "picture_url": None}  # passing users answer to akinator
+        try:
+            response = {"text": aki.answer(text), "picture_url": None}  # passing users answer to akinator
+        except akinator.exceptions.InvalidAnswerError:
+            return {"text": """You put "{}", which is an invalid answer.
+                The answer must be one of these:
+                    - "yes" OR "y" OR "0" for YES
+                    - "no" OR "n" OR "1" for NO
+                    - "i" OR "idk" OR "i dont know" OR "i don't know" OR "2" for I DON'T KNOW
+                    - "probably" OR "p" OR "3" for PROBABLY
+                    - "probably not" OR "pn" OR "4" for PROBABLY NOT
+                If you want to stop playing send word Stop.
+                """.format(text)}
         #  checking if we are close to make prediction
         if aki.progression >= 85:  # we can make a prediction
             aki.win()
