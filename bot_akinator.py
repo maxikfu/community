@@ -53,9 +53,9 @@ def game(from_id, text, time, returning):
                     - "probably" OR "p" OR "3" for PROBABLY
                     - "probably not" OR "pn" OR "4" for PROBABLY NOT
                 If you want to stop playing send word Stop.
-                """.format(text)}
+                """.format(text), 'win': False}
         #  checking if we are close to make prediction
-        if aki.progression >= 85:  # we can make a prediction
+        if aki.progression >= 90:  # we can make a prediction
             aki.win()
             response = {'text': "It's {} ({})!".format(aki.name, aki.description), 'win': True}
             if aki.picture:
