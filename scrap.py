@@ -12,7 +12,10 @@ site_url_ = 'http://urmary.cap.ru/news/?type=news'
 
 def get_news(site_url='http://urmary.cap.ru/news/?type=news'):
     # getting page content
-    page = requests.get(site_url)
+    try:
+        page = requests.get(site_url)
+    except ConnectionError("ConnectionError to off web site"):
+        return []
     # parsing html
     soup = BeautifulSoup(page.content, 'html.parser')
     # looking for the news list
