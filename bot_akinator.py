@@ -2,6 +2,7 @@ import akinator
 from datetime import datetime
 import storage
 
+
 AKINATOR_COLLECTION = 'akinator'
 
 
@@ -28,20 +29,21 @@ def quick_game():
 def game(from_id, text, time, returning):
     if text.lower() == 'stop':  # deleting the saved game
         storage.delete(AKINATOR_COLLECTION, str(from_id))
-        return {"text": "Thank you for playing! If you want to play again just type and send Akinator!", "image_url": None}
+        return {"text": "Thank you for playing! If you want to play again just type and send Akinator!",
+                "image_url": None, 'win': False}
     if returning:  # resuming the game
         fields = storage.get(AKINATOR_COLLECTION, str(from_id))  # getting saved game
         aki = load(fields)  # creating akinator instance
         if text.lower() in ['back', 'b']:  # we need to go back
             try:
-                response = {"text": aki.back(), "image_url": None}
+                response = {"text": aki.back(), "image_url": None, 'win': False}
                 aki.last_active = time
                 storage.update(AKINATOR_COLLECTION, str(from_id), dump(aki))
                 return response
             except akinator.exceptions.CantGoBackAnyFurther:
-                return {"text": "Cannot go back! If you want to stop send Stop", "image_url": None}
+                return {"text": "Cannot go back! If you want to stop send Stop", "image_url": None, 'win': False}
         try:
-            response = {"text": aki.answer(text), "image_url": None}  # passing users answer to akinator
+            response = {"text": aki.answer(text), "image_url": None, 'win': False}  # passing users answer to akinator
         except akinator.exceptions.InvalidAnswerError:
             return {"text": """You put "{}", which is an invalid answer.
                 The answer must be one of these:
@@ -55,7 +57,7 @@ def game(from_id, text, time, returning):
         #  checking if we are close to make prediction
         if aki.progression >= 85:  # we can make a prediction
             aki.win()
-            response = {'text': "It's {} ({})! Was I correct?".format(aki.name, aki.description)}
+            response = {'text': "It's {} ({})!".format(aki.name, aki.description), 'win': True}
             if aki.picture:
                 response['image_url'] = aki.picture
             storage.delete(AKINATOR_COLLECTION, str(from_id))  # deleting document when the game is over
@@ -66,7 +68,7 @@ def game(from_id, text, time, returning):
     else:  # creating the new game
         aki = akinator.Akinator()
         # starting game and asking user first question
-        response = {"text": aki.start_game(), "image_url": None}
+        response = {"text": aki.start_game(), "image_url": None, 'win': False}
         # save current progress
         aki.last_active = time
         storage.add(AKINATOR_COLLECTION, str(from_id), dump(aki))
