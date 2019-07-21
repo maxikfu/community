@@ -41,6 +41,14 @@ aki_keyboard_en = json.dumps(
                                 "label": "I don't know"
                             },
                         "color": "primary"
+                    },
+                    {
+                        "action":
+                            {
+                                "type": "text",
+                                "label": "Back"
+                            },
+                        "color": "negative"
                     }
                 ],
                 [
@@ -141,7 +149,7 @@ def processing():
                 att_photo = 'photo' + str(photo[0]['owner_id']) + "_" + str(photo[0]['id'])
         else:
             message_template = 'Ваше сообщение перенаправлено администратору, '\
-                               'он свяжется с вами в скором времени, а пока Вы можете поиграть в Акинатора!. Спасибо!'
+                               'он свяжется с вами в скором времени, а пока Вы можете поиграть в Акинатора! Спасибо!'
         api.messages.send(peer_id=user_id, message=message_template, random_id=data['object']['random_id'],
                           attachment=att_photo, keyboard=keyboard)
         return 'ok'
@@ -200,6 +208,6 @@ if __name__ == '__main__':
     # message_template = 'Спасибо что вы присоединились к нашему сообществу.\n' \
     #                    'Чтобы опубликовать новость на стене анонимно, необходимо в сообщение указать слово ' \
     #                    'Анон либо Анонимно, в противном случае анонимность поста не гарантирована.'
-    # args = {"peer_id": user_id, "message": message_template, "random_id": 0, "keyboard": ""}
+    # args = {"peer_id": user_id, "message": message_template, "random_id": 0, "keyboard": aki_keyboard_en}
     # api.messages.send(**args)
 

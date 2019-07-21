@@ -30,7 +30,7 @@ def game(from_id, text, time, returning):
     if text.lower() == 'stop':  # deleting the saved game
         storage.delete(AKINATOR_COLLECTION, str(from_id))
         return {"text": "Thank you for playing! If you want to play again just type and send Akinator!",
-                "image_url": None, 'win': False}
+                "image_url": None, 'win': True}
     if returning:  # resuming the game
         fields = storage.get(AKINATOR_COLLECTION, str(from_id))  # getting saved game
         aki = load(fields)  # creating akinator instance
