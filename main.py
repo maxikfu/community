@@ -5,7 +5,7 @@ import auth
 import re
 import scrap
 import storage
-from datetime import datetime
+from datetime import datetime, timezone
 import bot_akinator
 import requests
 
@@ -209,7 +209,7 @@ def cleaning_fb():
         for doc in docs:
             get_doc = storage.get(bot_akinator.AKINATOR_COLLECTION, doc)
             # if more than 5 min passed we delete aki history
-            if (datetime.now() - get_doc['last_active']).seconds > 300:
+            if (datetime.now(timezone.utc) - get_doc['last_active']).seconds > 300:
                 storage.delete(bot_akinator.AKINATOR_COLLECTION, doc)
     return 'ok'
 
