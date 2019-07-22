@@ -19,8 +19,11 @@ def get_news(site_url='http://urmary.cap.ru/news/?type=news'):
     # parsing html
     soup = BeautifulSoup(page.content, 'html.parser')
     # looking for the news list
-    div_container = soup.find('div', attrs={'class': 'news_list'})
-    news_list_all = div_container.find_all('div', attrs={'class': 'item_news'})
+    try:
+        div_container = soup.find('div', attrs={'class': 'news_list'})
+        news_list_all = div_container.find_all('div', attrs={'class': 'item_news'})
+    except AttributeError:
+        return []
     # iterating over news from the end to post them in chronological order
     for news_list in reversed(news_list_all):
         news_datetime = news_list.find('div', attrs={'class': 'news-list_date'})
