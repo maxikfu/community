@@ -4,5 +4,5 @@ cron:
   schedule: every 4 hours
 - description: "aki cleaning"
   url: /cleaning_fb
-  schedule: every 1 hour
+  schedule: every 1 hours
 
