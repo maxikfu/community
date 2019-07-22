@@ -200,6 +200,20 @@ def processing_news():
     return 'ok'
 
 
+@app.route('/cleaning_fb', methods=['POST', 'GET'])
+def cleaning_fb():
+    if request.headers['X-Appengine-Cron']:
+        # here we check how long passed after last message to akinator
+        # if it is long enough delete the document from collection
+        docs = storage.coll_content(bot_akinator.AKINATOR_COLLECTION)
+        for doc in docs:
+            get_doc = storage.get(bot_akinator.AKINATOR_COLLECTION, doc)
+            # if more than 5 min passed we delete aki history
+            if (datetime.now() - get_doc['last_active']).seconds > 300:
+                storage.delete(bot_akinator.AKINATOR_COLLECTION, doc)
+    return 'ok'
+
+
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8081, debug=True)
     # session = vk.Session(access_token=auth.community)
